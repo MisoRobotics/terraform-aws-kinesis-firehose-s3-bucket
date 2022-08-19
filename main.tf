@@ -257,8 +257,29 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
       log_stream_name = var.cloudwatch_log_stream_name
     }
 
+    dynamic "dynamic_partitioning_configuration" {
+      for_each = var.s3_dynamic_partitioning ? ["this"] : []
+      content {
+        enabled        = var.s3_dynamic_partitioning
+        retry_duration = var.s3_dynamic_partitioning_retry_duration
+      }
+    }
+
     processing_configuration {
-      enabled = false
+      enabled = length(var.processors) > 0
+      dynamic "processors" {
+        for_each = var.processors
+        content {
+          type = processors.value.type
+          dynamic "parameters" {
+            for_each = { for i, p in processors.value.parameters : i => p }
+            content {
+              parameter_name  = parameters.value.key
+              parameter_value = parameters.value.value
+            }
+          }
+        }
+      }
     }
   }
 }

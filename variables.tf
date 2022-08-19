@@ -106,3 +106,27 @@ variable "tags" {
   description = "Tags applied to the AWS Kinesis Data Firehose Delivery Stream."
   default     = {}
 }
+
+variable "processors" {
+  type = list(object({
+    type = string
+    parameters = list(object({
+      key   = string
+      value = string
+    }))
+  }))
+  description = "A list of processors for the AWS Kinesis Data Firehose Delivery Stream."
+  default     = []
+}
+
+variable "s3_dynamic_partitioning" {
+  type        = bool
+  description = "If true, enable dynamic partitioning on the AWS Kinesis Data Firehose Delivery Stream."
+  default     = false
+}
+
+variable "s3_dynamic_partitioning_retry_duration" {
+  type        = number
+  description = "Total amount of seconds Firehose spends on retries."
+  default     = 300
+}
