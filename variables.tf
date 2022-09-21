@@ -130,3 +130,17 @@ variable "s3_dynamic_partitioning_retry_duration" {
   description = "Total amount of seconds Firehose spends on retries."
   default     = 300
 }
+
+varible "s3_data_format_conversion" {
+  type = object({
+    output_format = optional(object({ serializer = string }))
+  })
+  validation {
+    condition = (
+      !contains(var.s3_data_format_conversion, "output_format")
+      || contains(var.s3_data_format_conversion, "output_format")
+      && contains(["orc", "parquet"], var.s3_data_format_conversion.output_format.serializer)
+    )
+    error_message = "Output serialization format must be either 'parquet' or 'orc'."
+  }
+}

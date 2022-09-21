@@ -265,6 +265,28 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
       }
     }
 
+    dynamic "data_format_conversion_configuration" {
+      for_each = var.data_format_conversion == null ? [] : toset(["default"])
+      content {
+        dynamic "output_format_configuration" {
+          for_each = var.s3_data_format_conversion.output_format == null ? [] : toset(["default"])
+          content {
+            dynamic "serializer" {
+              for_each = ["default"]
+              dynamic "orc_ser_de" {
+                for_each = var.s3_data_format_conversion.output_format == "orc" ? ["default"] : []
+                content {}
+              }
+              dynamic "parquet_ser_de" {
+                for_each = var.s3_data_format_conversion.output_format == "parquet" ? ["default"] : []
+                content {}
+              }
+            }
+          }
+        }
+      }
+    }
+
     processing_configuration {
       enabled = length(var.processors) > 0
       dynamic "processors" {
