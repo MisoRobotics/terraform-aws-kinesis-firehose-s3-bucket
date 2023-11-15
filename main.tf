@@ -242,8 +242,8 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
 
   extended_s3_configuration {
     bucket_arn          = var.s3_bucket_arn
-    buffer_size         = var.s3_buffer_size
-    buffer_interval     = var.s3_buffer_interval
+    buffering_size      = var.s3_buffer_size
+    buffering_interval  = var.s3_buffer_interval
     compression_format  = var.s3_compression_format
     error_output_prefix = var.s3_error_output_prefix
     role_arn            = aws_iam_role.s3_role.arn
@@ -268,6 +268,12 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
     dynamic "data_format_conversion_configuration" {
       for_each = var.s3_output_data_format_conversion == null ? [] : toset(["default"])
       content {
+        input_format_configuration {
+          deserializer {
+            hive_json_ser_de {}
+          }
+        }
+
         dynamic "output_format_configuration" {
           for_each = var.s3_output_data_format_conversion == null ? [] : toset(["default"])
           content {
@@ -282,6 +288,12 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
               }
             }
           }
+        }
+
+        schema_configuration {
+          database_name = var.output_database_name
+          role_arn      = var.output_role_arn
+          table_name    = var.output_table_name
         }
       }
     }

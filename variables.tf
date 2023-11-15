@@ -136,8 +136,26 @@ variable "s3_output_data_format_conversion" {
   description = "Convert the data to the specified format before writing to S3."
   default     = null
   validation {
-    condition     = contains(["orc", "parquet"], var.s3_output_data_format_conversion)
+    condition     = var.s3_output_data_format_conversion == null ? true : contains(["orc", "parquet"], var.s3_output_data_format_conversion)
     error_message = "Output serialization format must be either 'parquet' or 'orc'."
   }
 
+}
+
+variable "database_name" {
+  type        = string
+  description = "Specifies the name of the AWS Glue database that contains the schema for the output data. Required if using s3_output_data_format_conversion."
+  default     = null
+}
+
+variable "role_arn" {
+  type        = string
+  description = "The role that Kinesis Data Firehose can use to access AWS Glue. This role must be in the same account you use for Kinesis Data Firehose. Cross-account roles aren't allowed. Required if using s3_output_data_format_conversion."
+  default     = null
+}
+
+variable "table_name" {
+  type        = string
+  description = "Specifies the AWS Glue table that contains the column information that constitutes your data schema. Required if using s3_output_data_format_conversion."
+  default     = null
 }

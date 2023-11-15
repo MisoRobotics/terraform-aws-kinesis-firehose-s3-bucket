@@ -125,14 +125,14 @@ This project constitutes a work of the United States Government and is not subje
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.15.5 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 4 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.6 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 5 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 4 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 5 |
 
 ## Modules
 
@@ -163,12 +163,14 @@ No modules.
 | <a name="input_cloudwatch_log_group_name"></a> [cloudwatch\_log\_group\_name](#input\_cloudwatch\_log\_group\_name) | The CloudWatch Logs group name for logging.  Defaults to "/aws/kinesisfirehose/[NAME]" | `string` | `""` | no |
 | <a name="input_cloudwatch_log_stream_name"></a> [cloudwatch\_log\_stream\_name](#input\_cloudwatch\_log\_stream\_name) | The CloudWatch Logs stream name for logging. | `string` | `"S3Delivery"` | no |
 | <a name="input_cloudwatch_logging_enabled"></a> [cloudwatch\_logging\_enabled](#input\_cloudwatch\_logging\_enabled) | Enables or disables the logging to Cloudwatch Logs. | `bool` | `false` | no |
+| <a name="input_database_name"></a> [database\_name](#input\_database\_name) | Specifies the name of the AWS Glue database that contains the schema for the output data. Required if using s3\_output\_data\_format\_conversion. | `string` | `null` | no |
 | <a name="input_kinesis_role_name"></a> [kinesis\_role\_name](#input\_kinesis\_role\_name) | The name of the AWS IAM Role for reading records from the source AWS Kinesis Stream. | `string` | n/a | yes |
 | <a name="input_kinesis_role_policy_document"></a> [kinesis\_role\_policy\_document](#input\_kinesis\_role\_policy\_document) | The contents of the IAM policy attached to the IAM role used by the Kinesis Data Firehose Delivery Stream to read records from the source AWS Kinesis Stream.  If not defined, then creates a default policy. | `string` | `""` | no |
 | <a name="input_kinesis_role_policy_name"></a> [kinesis\_role\_policy\_name](#input\_kinesis\_role\_policy\_name) | The name of the IAM policy attached to the IAM Role used by the Kinesis Data Firehose Delivery Stream to read records from the source AWS Kinesis Stream.  If not defined, then uses the value of the "kinesis\_role\_name". | `string` | `""` | no |
 | <a name="input_kinesis_stream_arn"></a> [kinesis\_stream\_arn](#input\_kinesis\_stream\_arn) | The AWS Kinesis Stream used as the source of the AWS Kinesis Data Firehose Delivery Stream. | `string` | n/a | yes |
 | <a name="input_name"></a> [name](#input\_name) | A name to identify the AWS Kinesis Data Firehose Delivery Stream. This is unique to the AWS account and region the stream is created in. | `string` | n/a | yes |
 | <a name="input_processors"></a> [processors](#input\_processors) | A list of processors for the AWS Kinesis Data Firehose Delivery Stream. | <pre>list(object({<br>    type = string<br>    parameters = list(object({<br>      key   = string<br>      value = string<br>    }))<br>  }))</pre> | `[]` | no |
+| <a name="input_role_arn"></a> [role\_arn](#input\_role\_arn) | The role that Kinesis Data Firehose can use to access AWS Glue. This role must be in the same account you use for Kinesis Data Firehose. Cross-account roles aren't allowed. Required if using s3\_output\_data\_format\_conversion. | `string` | `null` | no |
 | <a name="input_s3_bucket_arn"></a> [s3\_bucket\_arn](#input\_s3\_bucket\_arn) | The ARN of the AWS S3 Bucket that receives the records. | `string` | n/a | yes |
 | <a name="input_s3_buffer_interval"></a> [s3\_buffer\_interval](#input\_s3\_buffer\_interval) | Buffer incoming data for the specified period of time, in seconds, before delivering it to the destination. | `number` | `300` | no |
 | <a name="input_s3_buffer_size"></a> [s3\_buffer\_size](#input\_s3\_buffer\_size) | Buffer incoming data to the specified size, in MBs, before delivering it to the destination | `number` | `5` | no |
@@ -182,6 +184,7 @@ No modules.
 | <a name="input_s3_role_name"></a> [s3\_role\_name](#input\_s3\_role\_name) | The name of the AWS IAM Role for delivering files to the destination AWS S3 Bucket. | `string` | n/a | yes |
 | <a name="input_s3_role_policy_document"></a> [s3\_role\_policy\_document](#input\_s3\_role\_policy\_document) | The contents of the IAM policy attached to the IAM role used by the Kinesis Data Firehose Delivery Stream for delivering data to the AWS S3 Bucket.  If not defined, then creates the policy based on allowed actions. | `string` | `""` | no |
 | <a name="input_s3_role_policy_name"></a> [s3\_role\_policy\_name](#input\_s3\_role\_policy\_name) | The name of the IAM policy attached to the IAM Role used by the Kinesis Data Firehose Delivery Stream.  If not defined, then uses the value of the "s3\_role\_name". | `string` | `""` | no |
+| <a name="input_table_name"></a> [table\_name](#input\_table\_name) | Specifies the AWS Glue table that contains the column information that constitutes your data schema. Required if using s3\_output\_data\_format\_conversion. | `string` | `null` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags applied to the AWS Kinesis Data Firehose Delivery Stream. | `map(string)` | `{}` | no |
 
 ## Outputs
